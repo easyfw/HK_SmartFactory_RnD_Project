@@ -121,11 +121,26 @@ class TestProductionLogger(unittest.TestCase):
 class TestConfigLoader(unittest.TestCase):
     """Tests for configuration loading"""
     
+    def setUp(self):
+        """Create temporary config for testing"""
+        self.test_config = Path("test_config.conf")
+        with open(self.test_config, 'w') as f:
+            f.write("[factory]\n")
+            f.write("facility_name = Test Facility\n")
+            f.write("[line_a]\n")
+            f.write("name = Test Line\n")
+    
+    def tearDown(self):
+        """Remove test config"""
+        if self.test_config.exists():
+            self.test_config.unlink()
+    
     def test_load_existing_config(self):
-        """Test loading hk_factory.conf"""
-        config = load_config("hk_factory.conf")
+        """Test loading config file"""
+        config = load_config(str(self.test_config))
         self.assertIn("factory", config)
         self.assertIn("line_a", config)
+        self.assertEqual(config["factory"]["facility_name"], "Test Facility")
     
     def test_load_missing_config(self):
         """Test loading non-existent config"""

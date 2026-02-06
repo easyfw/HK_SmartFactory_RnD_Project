@@ -146,7 +146,7 @@ class FactoryDashboardHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps(response).encode())
     
-    def log_message(self, format, *args):
+    def log_message(self, fmt, *args):
         """Suppress request logging"""
         pass
 
